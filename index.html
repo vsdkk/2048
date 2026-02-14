@@ -579,12 +579,18 @@
 
         // --- FLASHLIGHT MOUSE TRACKING ---
         document.addEventListener('mousemove', (e) => {
+            // Не рухати фон, якщо курсор над ігровим полем
+            if (e.target.closest('.board-wrapper')) return;
+
             const bg = document.getElementById('bg-layer');
             bg.style.setProperty('--x', e.clientX + 'px');
             bg.style.setProperty('--y', e.clientY + 'px');
         });
 
         document.addEventListener('touchmove', (e) => {
+             // Не рухати фон при грі (свайпах)
+             if (e.target.closest('.board-wrapper')) return;
+
             const bg = document.getElementById('bg-layer');
             const touch = e.touches[0];
             bg.style.setProperty('--x', touch.clientX + 'px');
