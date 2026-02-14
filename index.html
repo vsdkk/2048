@@ -11,9 +11,6 @@
     <!-- Firebase SDK v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
-    <!-- Screenshot Generator Library -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
         /* --- MAGICK PURPLE THEME --- */
@@ -235,7 +232,7 @@
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #ffffff; /* Змінено на білий */
+            color: #ffffff; /* White Text */
         }
 
         /* PARTICLES */
@@ -266,20 +263,6 @@
             box-shadow: 0 0 20px rgba(124, 77, 255, 0.4); transition: 0.2s;
         }
         .btn-purple:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(176, 38, 255, 0.7); }
-
-        /* SHARE BUTTONS */
-        .share-buttons { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
-        .btn-share {
-            border: 1px solid var(--neon-purple); 
-            background: rgba(40, 10, 60, 0.8);
-            color: #fff; padding: 12px 25px; border-radius: 30px; cursor: pointer;
-            font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px;
-            transition: all 0.2s; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .btn-share:hover { background: #b026ff; box-shadow: 0 0 30px rgba(176, 38, 255, 0.6); transform: scale(1.05); }
 
         /* MODALS */
         .modal-overlay {
@@ -361,58 +344,6 @@
         .lb-item.rank-3 .lb-rank { color: #ffab76; font-size: 18px; }
         .lb-item.rank-3 .lb-score { color: #ffab76; text-shadow: 0 0 10px rgba(205, 127, 50, 0.4); }
 
-        /* CAPTURE CARD HIDDEN STYLE */
-        #hidden-capture-card {
-            position: fixed;
-            left: -9999px; /* Hide off screen */
-            width: 400px;
-            /* Auto height based on content */
-            background: #05000a;
-            border: 4px solid #b026ff;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            font-family: 'Montserrat', sans-serif;
-            box-shadow: 0 0 100px rgba(176, 38, 255, 0.5);
-        }
-        #hidden-capture-card .cap-title {
-            font-family: 'Cinzel', serif;
-            font-size: 40px;
-            color: #fff;
-            margin-bottom: 5px;
-            text-shadow: 0 0 20px #b026ff;
-        }
-        #hidden-capture-card .cap-label {
-            font-size: 14px;
-            color: #a080c0;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-        }
-        #hidden-capture-card .cap-score-big {
-            font-size: 60px;
-            color: #ffd700;
-            font-weight: 900;
-            line-height: 1;
-            margin-bottom: 20px;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-        }
-        #hidden-capture-card .cap-player {
-            font-size: 24px;
-            color: #fff;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-        #hidden-capture-card .cap-footer {
-            margin-top: 10px;
-            font-size: 12px;
-            color: #604080;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
         @media (max-width: 500px) { :root { --tile-size: 70px; --gap: 10px; } }
 
     </style>
@@ -489,10 +420,6 @@
                     <div class="result-score" id="final-score">0</div>
                     <div style="font-size: 18px; color: #fff; margin-bottom: 30px;">Player: <span id="final-name" style="color:#b026ff; font-weight:bold;">...</span></div>
                     
-                    <div class="share-buttons">
-                        <button onclick="copyCardAndOpenX()" class="btn-share btn-x">Copy Card 📋</button>
-                    </div>
-
                     <div class="result-footer">Certified by 2048 Magick</div>
                 </div>
 
@@ -502,18 +429,6 @@
 
         <button onclick="openLeaderboard()" class="btn-purple">🏆 WEEZERBORD</button>
         <div style="margin-top:10px; color:#fff; font-size:12px; cursor:pointer; opacity: 0.7;" onclick="restartGame()">RESTART</div>
-    </div>
-
-    <!-- Hidden element for generating clean screenshots without grid -->
-    <div id="hidden-capture-card">
-        <div class="cap-title">2048 MAGICK</div>
-        
-        <div class="cap-label">TOTAL SCORE</div>
-        <div class="cap-score-big"><span id="cap-score-val">0</span></div>
-        
-        <div class="cap-player">Player: <span id="cap-name-val" style="color:#b026ff;">...</span></div>
-
-        <div class="cap-footer">Certified by 2048 Magick</div>
     </div>
 
     <script>
@@ -772,8 +687,7 @@
                 if(score > bestScore) {
                     bestScore = score;
                     bestEl.innerText = bestScore;
-                    // Reset to a new path to clear old scores for everyone
-                    db.ref('magick_scores_v2/'+username).update({highscore:bestScore});
+                    db.ref('users/'+username).update({highscore:bestScore});
                 }
                 
                 updateUI();
@@ -819,8 +733,7 @@
             lbModal.classList.remove('hidden');
             const c = document.getElementById('lb-content');
             c.innerHTML = 'Loading...';
-            // Use the new path 'magick_scores_v2'
-            db.ref('magick_scores_v2').orderByChild('highscore').limitToLast(20).once('value').then(s => {
+            db.ref('users').orderByChild('highscore').limitToLast(20).once('value').then(s => {
                 let d = [];
                 s.forEach(ch => d.push({n:ch.key, s:ch.val().highscore||0}));
                 d.sort((a,b)=>b.s-a.s);
@@ -838,44 +751,9 @@
                     div.innerHTML = `<span class="lb-rank">${rankIcon}</span> <span class="lb-name">${p.n}</span> <span class="lb-score">${p.s}</span>`;
                     c.appendChild(div);
                 });
-            }).catch(err => {
-                c.innerHTML = '<div style="color: #ff5555; text-align: center;">Error loading: ' + err.message + '<br>Check database rules.</div>';
             });
         }
         window.closeLeaderboard = () => lbModal.classList.add('hidden');
-
-        // --- NEW SCREENSHOT GENERATION ---
-        window.copyCardAndOpenX = function() {
-            // Update the hidden card with current data
-            document.getElementById('cap-score-val').innerText = score;
-            document.getElementById('cap-name-val').innerText = username;
-            
-            // Clean slate for capture (no grid needed)
-            const element = document.getElementById("hidden-capture-card"); 
-            
-            html2canvas(element, {
-                backgroundColor: "#05000a",
-                scale: 2 
-            }).then(canvas => {
-                canvas.toBlob(blob => {
-                    if (blob) {
-                        try {
-                            const item = new ClipboardItem({ "image/png": blob });
-                            navigator.clipboard.write([item]).then(() => {
-                                alert("Card copied to clipboard! Now paste it in your tweet.");
-                                const text = `I scored ${score} in 2048 Magick! Can you beat the Void? 🔮`;
-                                const url = "https://x.com/intent/tweet?text=" + encodeURIComponent(text) + "&hashtags=2048Magick,IndieDev";
-                                window.open(url, '_blank');
-                            });
-                        } catch (err) {
-                            console.error("Clipboard failed", err);
-                            // Fallback if clipboard API fails (e.g. non-HTTPS)
-                            alert("Could not copy image automatically. Use the Save Card button instead.");
-                        }
-                    }
-                });
-            });
-        }
 
     </script>
 </body>
