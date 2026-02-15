@@ -53,7 +53,7 @@
 
         .bg-layer {
             width: 100%; height: 100%;
-            /* RESTORED GRADIENT BACKGROUND */
+            /* SUBTLE PURPLE GRADIENT INSTEAD OF CASTLE */
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -61,8 +61,8 @@
             /* Flashlight Effect Mask */
             --x: 50%;
             --y: 50%;
-            -webkit-mask-image: radial-gradient(circle 300px at var(--x) var(--y), rgba(0,0,0,0.8) 20%, transparent 100%);
-            mask-image: radial-gradient(circle 300px at var(--x) var(--y), rgba(0,0,0,0.8) 20%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle 300px at var(--x) var(--y), black 20%, transparent 100%);
+            mask-image: radial-gradient(circle 300px at var(--x) var(--y), black 20%, transparent 100%);
             
             transition: opacity 0.5s;
         }
@@ -73,14 +73,13 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* COMETS ANIMATION - RESTORED PINK/PURPLE */
+        /* COMETS ANIMATION */
         .comet {
             position: absolute;
             width: 150px;
             height: 2px;
-            /* Pink/Purple Gradient */
-            background: linear-gradient(90deg, var(--neon-purple), transparent);
-            box-shadow: 0 0 15px var(--neon-pink);
+            background: linear-gradient(90deg, #fff, transparent);
+            box-shadow: 0 0 15px var(--neon-purple);
             opacity: 0;
             transform: rotate(-45deg);
             z-index: -1;
@@ -128,7 +127,7 @@
             background: linear-gradient(to right, var(--neon-pink), var(--neon-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.6));
+            filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.6));
             letter-spacing: 2px;
         }
 
@@ -202,64 +201,20 @@
         .t512 { background: linear-gradient(135deg, #311b92, #1a237e); color: #fff; font-size: 26px; border: 1px solid #536dfe; box-shadow: 0 0 35px rgba(83, 109, 254, 0.8); }
         .t1024 { background: linear-gradient(135deg, #000, #4a148c); color: #e0d0ff; font-size: 22px; border: 1px solid #d500f9; box-shadow: 0 0 40px rgba(213, 0, 249, 0.8); }
         .t2048 { background: linear-gradient(135deg, #000, #200030); color: var(--gold-accent); border: 2px solid var(--gold-accent); box-shadow: 0 0 50px var(--neon-purple), inset 0 0 20px var(--neon-purple); animation: shine 3s infinite; }
+        
+        /* 4096 - Mystic Red */
+        .t4096 { background: linear-gradient(135deg, #ff1744, #d50000); color: #fff; border: 2px solid #ff5252; box-shadow: 0 0 55px #ff1744, inset 0 0 25px #ff1744; animation: pulse-red 2s infinite; font-size: 20px; }
+        /* 8192 - Electric Blue */
+        .t8192 { background: linear-gradient(135deg, #2979ff, #2962ff); color: #fff; border: 2px solid #448aff; box-shadow: 0 0 60px #2979ff, inset 0 0 30px #2979ff; animation: pulse-blue 2s infinite; font-size: 20px; }
+        /* 16384 - Void White */
+        .t16384 { background: linear-gradient(135deg, #000, #424242); color: #fff; border: 2px solid #fff; box-shadow: 0 0 65px #ffffff, inset 0 0 35px #ffffff; animation: shine 1.5s infinite; font-size: 18px; }
+
         .tsuper { background: #000; border: 2px solid #fff; color: #fff; box-shadow: 0 0 40px #fff; }
 
         @keyframes pulse-purple { 0% { box-shadow: 0 0 15px rgba(224, 64, 251, 0.5); } 50% { box-shadow: 0 0 25px rgba(224, 64, 251, 0.8); } 100% { box-shadow: 0 0 15px rgba(224, 64, 251, 0.5); } }
         @keyframes shine { 0% { border-color: var(--neon-purple); } 50% { border-color: #fff; } 100% { border-color: var(--neon-purple); } }
-
-        /* TUTORIAL OVERLAY */
-        #tutorial-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            pointer-events: none; z-index: 20; opacity: 0; transition: opacity 1s;
-        }
-        #tutorial-overlay.show { opacity: 1; }
-        
-        .tut-content {
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
-        }
-
-        .tut-keys-wrapper { display: flex; gap: 30px; align-items: center; }
-        .tut-keys-group { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .tut-row { display: flex; gap: 5px; }
-        
-        .key-cap {
-            width: 50px; height: 50px;
-            border: 2px solid rgba(255,255,255,0.9);
-            border-radius: 8px;
-            background: rgba(40, 10, 60, 0.8);
-            color: #fff;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 24px; font-weight: bold;
-            box-shadow: 0 0 15px var(--neon-purple);
-            font-family: 'Montserrat', sans-serif;
-            animation: floatKeys 2s ease-in-out infinite;
-        }
-        
-        @keyframes floatKeys { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
-        .tut-keys-group .key-cap:nth-child(1) { animation-delay: 0s; }
-        .tut-row .key-cap:nth-child(1) { animation-delay: 0.1s; }
-        .tut-row .key-cap:nth-child(2) { animation-delay: 0.2s; }
-        .tut-row .key-cap:nth-child(3) { animation-delay: 0.3s; }
-        
-        .tut-text { 
-            font-size: 14px; font-family: 'Cinzel'; text-transform: uppercase; letter-spacing: 3px; 
-            color: #fff; text-shadow: 0 0 15px var(--neon-purple); margin-top: 15px;
-        }
-        
-        .tut-icon { font-size: 60px; filter: drop-shadow(0 0 10px #b026ff); animation: bounceHint 1.5s infinite; }
-        @keyframes bounceHint { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        .tut-mobile-only { display: none; }
-        @media (max-width: 768px) {
-            .tut-pc-only { display: none; }
-            .tut-mobile-only { display: flex; }
-        }
-        @media (min-width: 769px) {
-            .tut-mobile-only { display: none; }
-            .tut-pc-only { display: flex; }
-        }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 55px #ff1744; } 50% { box-shadow: 0 0 70px #ff1744; } 100% { box-shadow: 0 0 55px #ff1744; } }
+        @keyframes pulse-blue { 0% { box-shadow: 0 0 60px #2979ff; } 50% { box-shadow: 0 0 75px #2979ff; } 100% { box-shadow: 0 0 60px #2979ff; } }
 
         /* GAME OVER OVERLAY / RESULT CARD */
         #game-over-overlay {
@@ -339,6 +294,20 @@
         }
         .btn-purple:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(176, 38, 255, 0.7); }
 
+        /* SHARE BUTTONS */
+        .share-buttons { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
+        .btn-share {
+            border: 1px solid var(--neon-purple); 
+            background: rgba(40, 10, 60, 0.8);
+            color: #fff; padding: 12px 25px; border-radius: 30px; cursor: pointer;
+            font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px;
+            transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-share:hover { background: #b026ff; box-shadow: 0 0 30px rgba(176, 38, 255, 0.6); transform: scale(1.05); }
+
         /* MODALS */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -367,7 +336,7 @@
             font-family: 'Cinzel', serif; 
             font-size: 36px; 
             margin: 0 0 20px 0; 
-            background: linear-gradient(to right, #ff00ff, #b026ff); /* RESTORED PINK */
+            background: linear-gradient(to right, #fff, var(--neon-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.8));
@@ -439,7 +408,6 @@
     <div class="bg-container">
         <!-- FLASHLIGHT BACKGROUND -->
         <div class="bg-layer" id="bg-layer"></div>
-        <!-- Comets container is appended via JS -->
     </div>
     <div class="overlay"></div>
 
@@ -479,8 +447,6 @@
                 </h1>
                 <div id="player-display" style="font-size:14px; opacity:0.8; margin-top:5px; color:#d0b0ff; font-weight:600;">
                     Mage: <span id="current-username">...</span>
-                    <!-- Change user button -->
-                    <span onclick="logout()" style="cursor:pointer; font-size:10px; border:1px solid #604080; padding:2px 5px; border-radius:4px; margin-left:5px; color:#a080c0; text-transform:uppercase; transition:0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='#fff'" onmouseout="this.style.color='#a080c0'; this.style.borderColor='#604080'">CHANGE</span>
                 </div>
             </div>
             <div class="stats-group">
@@ -597,14 +563,14 @@
 
         // --- FIREBASE ---
         const firebaseConfig = {
-            apiKey: "AIzaSyDwUQj2MG2ZLJLRSKYsDDMOJAqQZPtzYSQ",
-            authDomain: "magic-6248d.firebaseapp.com",
-            databaseURL: "https://magic-6248d-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "magic-6248d",
-            storageBucket: "magic-6248d.firebasestorage.app",
-            messagingSenderId: "651434543320",
-            appId: "1:651434543320:web:5e915ad9d951a58e71efad",
-            measurementId: "G-B7XXD8PDBM"
+            apiKey: "AIzaSyAS9c-ZENVkL7wsYCsuYST8mJd-2dV-cA8",
+            authDomain: "project-1867017293223550555.firebaseapp.com",
+            databaseURL: "https://project-1867017293223550555-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "project-1867017293223550555",
+            storageBucket: "project-1867017293223550555.firebasestorage.app",
+            messagingSenderId: "613645431332",
+            appId: "1:613645431332:web:29260f1e6ea92a86781eb1",
+            measurementId: "G-19TD39WRC3"
         };
         try { firebase.initializeApp(firebaseConfig); } catch(e){}
         const db = firebase.database();
@@ -701,7 +667,8 @@
         function showGame() {
             gameUI.classList.remove('hidden');
             playerEl.innerText = username;
-            db.ref('users/'+username).on('value', s => {
+            // USING THE NEW PATH 'scores_final' TO ENSURE CLEAN LEADERBOARD
+            db.ref('scores_final/'+username).on('value', s => {
                 const d = s.val();
                 if(d && d.highscore) { bestScore = d.highscore; bestEl.innerText = bestScore; }
             });
@@ -744,8 +711,8 @@
             for(let r=0; r<size; r++) for(let c=0; c<size; c++) if(board[r][c]===0) empty.push({r,c});
             if(empty.length) {
                 let {r,c} = empty[Math.floor(Math.random()*empty.length)];
-                // HARDER MODE: 20% chance for 4 (was 10%)
-                board[r][c] = Math.random()<0.8 ? 2 : 4;
+                // HARDER MODE: 30% chance for 4 (was 20%)
+                board[r][c] = Math.random()<0.7 ? 2 : 4;
             }
         }
 
@@ -763,7 +730,11 @@
                         div.innerText = val;
                         div.style.top = (r*(tSize+gap))+'px';
                         div.style.left = (c*(tSize+gap))+'px';
-                        if(val <= 2048) div.classList.add('t'+val); else div.classList.add('tsuper');
+                        
+                        if(val <= 2048) div.classList.add('t'+val);
+                        else if(val <= 16384) div.classList.add('t'+val);
+                        else div.classList.add('tsuper');
+
                         tileLayer.appendChild(div);
                     }
                 }
@@ -867,7 +838,7 @@
                 if(score > bestScore) {
                     bestScore = score;
                     bestEl.innerText = bestScore;
-                    // Saving to new table 'scores_final' for fresh leaderboard
+                    // Saving to 'scores_final' (SAME PATH AS LEADERBOARD)
                     db.ref('scores_final/'+username).update({highscore:bestScore})
                       .catch(e => console.error("Error saving score:", e));
                 }
@@ -932,7 +903,7 @@
             const c = document.getElementById('lb-content');
             c.innerHTML = '<div style="text-align:center; color:#a080c0; padding:20px;">Summoning Spirits...</div>';
             
-            // Fetch users from new clean path 'scores_final'
+            // Fetch users from 'scores_final' (MATCHING THE SAVE PATH)
             lbQuery = db.ref('scores_final');
             
             lbCallback = (snapshot) => {
@@ -981,7 +952,7 @@
             // Listen for changes
             lbQuery.on('value', lbCallback, (error) => {
                  console.error(error);
-                 c.innerHTML = '<div style="text-align:center; color:#ff5555; padding:20px;">Connection severed.<br>Check permissions (Rules).</div>';
+                 c.innerHTML = '<div style="text-align:center; color:#ff5555; padding:20px;">Connection severed.<br>Check Database Rules.</div>';
             });
         }
         
