@@ -11,6 +11,8 @@
     <!-- Firebase SDK v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <!-- (No html2canvas needed anymore) -->
 
     <style>
         /* --- MAGICK PURPLE THEME --- */
@@ -53,6 +55,7 @@
 
         .bg-layer {
             width: 100%; height: 100%;
+            /* SUBTLE PURPLE GRADIENT */
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -70,6 +73,26 @@
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+
+        /* COMETS ANIMATION */
+        .comet {
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-purple), transparent);
+            box-shadow: 0 0 10px var(--neon-purple);
+            opacity: 0;
+            transform: rotate(-45deg);
+            z-index: -1;
+            pointer-events: none;
+            animation: fly 2s linear forwards;
+        }
+
+        @keyframes fly {
+            0% { opacity: 0; transform: translate(0, 0) rotate(-45deg) scale(0.5); }
+            10% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-300px, 300px) rotate(-45deg) scale(1.2); }
         }
 
         /* UI HEADER */
@@ -185,7 +208,80 @@
         @keyframes pulse-purple { 0% { box-shadow: 0 0 15px rgba(224, 64, 251, 0.5); } 50% { box-shadow: 0 0 25px rgba(224, 64, 251, 0.8); } 100% { box-shadow: 0 0 15px rgba(224, 64, 251, 0.5); } }
         @keyframes shine { 0% { border-color: var(--neon-purple); } 50% { border-color: #fff; } 100% { border-color: var(--neon-purple); } }
 
-        /* GAME OVER OVERLAY */
+        /* TUTORIAL OVERLAY */
+        #tutorial-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            pointer-events: none; z-index: 20; opacity: 0; transition: opacity 1s;
+        }
+        #tutorial-overlay.show { opacity: 1; }
+        
+        .tut-content {
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+
+        .tut-keys-wrapper {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        .tut-keys-group {
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 5px;
+        }
+        .tut-row { display: flex; gap: 5px; }
+        .key-cap {
+            width: 50px; height: 50px;
+            border: 2px solid rgba(255,255,255,0.8);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; font-weight: bold;
+            box-shadow: 0 4px 0 rgba(255,255,255,0.8);
+            font-family: 'Montserrat', sans-serif;
+            text-shadow: 0 0 5px var(--neon-purple);
+            /* KEY ANIMATION */
+            animation: floatKeys 2s ease-in-out infinite;
+        }
+        
+        @keyframes floatKeys {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Stagger animations */
+        .tut-keys-group .key-cap:nth-child(1) { animation-delay: 0s; }
+        .tut-row .key-cap:nth-child(1) { animation-delay: 0.1s; }
+        .tut-row .key-cap:nth-child(2) { animation-delay: 0.2s; }
+        .tut-row .key-cap:nth-child(3) { animation-delay: 0.3s; }
+        
+        .tut-text { 
+            font-size: 14px; font-family: 'Cinzel'; text-transform: uppercase; letter-spacing: 3px; 
+            color: #fff; text-shadow: 0 0 15px var(--neon-purple);
+            margin-top: 15px; font-weight: bold;
+        }
+
+        .tut-icon { 
+            font-size: 60px; filter: drop-shadow(0 0 10px #b026ff); 
+            animation: bounceHint 1.5s infinite; 
+        }
+        @keyframes bounceHint { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* Hide Tutorial on Mobile for Specific Elements if needed, but flex handles it */
+        .tut-mobile-only { display: none; }
+        @media (max-width: 768px) {
+            .tut-pc-only { display: none; }
+            .tut-mobile-only { display: flex; }
+        }
+        @media (min-width: 769px) {
+            .tut-mobile-only { display: none; }
+            .tut-pc-only { display: flex; }
+        }
+
+        /* GAME OVER OVERLAY / RESULT CARD */
         #game-over-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(5, 0, 10, 0.9);
@@ -231,7 +327,7 @@
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #ffffff; /* White Text */
+            color: #ffffff;
         }
 
         /* PARTICLES */
@@ -263,18 +359,43 @@
         }
         .btn-purple:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(176, 38, 255, 0.7); }
 
+        /* SHARE BUTTONS */
+        .share-buttons { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
+        .btn-share {
+            border: 1px solid var(--neon-purple); 
+            background: rgba(40, 10, 60, 0.8);
+            color: #fff; padding: 12px 25px; border-radius: 30px; cursor: pointer;
+            font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px;
+            transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-share:hover { background: #b026ff; box-shadow: 0 0 30px rgba(176, 38, 255, 0.6); transform: scale(1.05); }
+
         /* MODALS */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.5); /* TRANSPARENT BACKGROUND */
+            backdrop-filter: blur(8px); /* BLUR EFFECT */
             display: flex; justify-content: center; align-items: center; z-index: 1000;
         }
         .modal-box {
-            background: #1a0525; padding: 40px; border-radius: 20px;
+            background: rgba(20, 10, 30, 0.85); /* Semi-transparent box */
+            padding: 40px; border-radius: 20px;
             border: 2px solid var(--neon-purple); text-align: center;
-            box-shadow: 0 0 80px rgba(176, 38, 255, 0.2);
+            box-shadow: 0 0 80px rgba(176, 38, 255, 0.3);
             width: 90%; max-width: 450px;
+            position: relative;
+            z-index: 1001;
+            /* Breathe animation */
+            animation: breatheBox 4s ease-in-out infinite;
         }
+        @keyframes breatheBox {
+            0%, 100% { box-shadow: 0 0 50px rgba(176, 38, 255, 0.2); }
+            50% { box-shadow: 0 0 80px rgba(176, 38, 255, 0.5); }
+        }
+
         .modal-box h2 {
             color: #fff; 
             font-family: 'Cinzel', serif; 
@@ -286,7 +407,7 @@
             filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.8));
         }
         input { 
-            padding: 15px; width: 100%; background: #2a0a40; border: 1px solid #502070; 
+            padding: 15px; width: 100%; background: rgba(42, 10, 64, 0.8); border: 1px solid #502070; 
             color: #fff; text-align: center; margin: 20px 0; border-radius: 10px; font-size: 16px; outline: none;
         }
         input:focus { border-color: var(--neon-purple); }
@@ -390,7 +511,7 @@
                     <span style="display: block; font-size: 10px; letter-spacing: 4px; color: #fff; text-shadow: none; margin-top: 5px; -webkit-text-fill-color: #fff;">MagicBlock</span>
                 </h1>
                 <div id="player-display" style="font-size:14px; opacity:0.8; margin-top:5px; color:#d0b0ff; font-weight:600;">
-                    Player: <span id="current-username">...</span>
+                    Mage: <span id="current-username">...</span>
                     <!-- Change user button -->
                     <span onclick="logout()" style="cursor:pointer; font-size:10px; border:1px solid #604080; padding:2px 5px; border-radius:4px; margin-left:5px; color:#a080c0; text-transform:uppercase; transition:0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='#fff'" onmouseout="this.style.color='#a080c0'; this.style.borderColor='#604080'">CHANGE</span>
                 </div>
@@ -421,13 +542,50 @@
                 <div class="result-card">
                     <div class="result-title">SCORE</div>
                     <div class="result-score" id="final-score">0</div>
-                    <div style="font-size: 18px; color: #fff; margin-bottom: 30px;">Player: <span id="final-name" style="color:#b026ff; font-weight:bold;">...</span></div>
+                    <div style="font-size: 18px; color: #fff; margin-bottom: 30px;">Mage: <span id="final-name" style="color:#b026ff; font-weight:bold;">...</span></div>
 
                     <div class="result-footer">Certified by 2048 Magick</div>
                 </div>
 
                 <button onclick="restartGame()" class="btn-purple" style="margin-top: 20px; width:auto; padding:10px 40px; position: relative; z-index: 100;">TRY AGAIN</button>
             </div>
+
+            <!-- Tutorial Overlay -->
+            <div id="tutorial-overlay">
+                <div class="tut-content tut-pc-only">
+                    <div class="tut-keys-wrapper">
+                        <!-- WASD -->
+                        <div class="tut-keys-group">
+                            <div class="key-cap">W</div>
+                            <div class="tut-row">
+                                <div class="key-cap">A</div>
+                                <div class="key-cap">S</div>
+                                <div class="key-cap">D</div>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 24px; font-weight: bold; color: rgba(255,255,255,0.5);">OR</div>
+
+                        <!-- Arrows -->
+                        <div class="tut-keys-group">
+                            <div class="key-cap">↑</div>
+                            <div class="tut-row">
+                                <div class="key-cap">←</div>
+                                <div class="key-cap">↓</div>
+                                <div class="key-cap">→</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tut-text">Use Keys</div>
+                </div>
+                <div class="tut-content tut-mobile-only">
+                    <div class="tut-item">
+                        <div class="tut-icon">👆</div>
+                        <div class="tut-text">Swipe</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <button onclick="openLeaderboard()" class="btn-purple">🏆 WEEZERBORD</button>
@@ -505,12 +663,45 @@
         const gameOverEl = document.getElementById('game-over-overlay');
         const finalScoreEl = document.getElementById('final-score');
         const finalNameEl = document.getElementById('final-name');
+        const tutorialOverlay = document.getElementById('tutorial-overlay');
+
+        // COMET SPAWNER
+        function spawnComet() {
+            // Chance based on document visibility to save resources
+            if (document.hidden) return;
+            
+            if (Math.random() > 0.3) { // 30% chance each interval
+                const bgContainer = document.querySelector('.bg-container');
+                const comet = document.createElement('div');
+                comet.className = 'comet';
+                
+                // Randomize start position in the top-right area mostly
+                const startY = Math.random() * window.innerHeight * 0.5; // Top half
+                const startX = Math.random() * window.innerWidth;
+                
+                comet.style.top = startY + 'px';
+                comet.style.left = startX + 'px';
+                
+                // Randomize animation duration
+                const duration = 1.5 + Math.random() * 2;
+                comet.style.animationDuration = duration + 's';
+                
+                bgContainer.appendChild(comet);
+                
+                setTimeout(() => {
+                    comet.remove();
+                }, duration * 1000);
+            }
+        }
 
         window.onload = () => {
             if(username) {
                 document.getElementById('username-input').value = username;
             }
             loginModal.classList.remove('hidden');
+            
+            // Start spawning comets
+            setInterval(spawnComet, 2000);
         };
 
         // --- FLASHLIGHT MOUSE TRACKING ---
@@ -548,6 +739,12 @@
                 if(d && d.highscore) { bestScore = d.highscore; bestEl.innerText = bestScore; }
             });
             startGame();
+            
+            // Show Tutorial
+            tutorialOverlay.classList.add('show');
+            setTimeout(() => {
+                tutorialOverlay.classList.remove('show');
+            }, 5000);
         }
 
         // Change user function
@@ -577,6 +774,7 @@
             for(let r=0; r<size; r++) for(let c=0; c<size; c++) if(board[r][c]===0) empty.push({r,c});
             if(empty.length) {
                 let {r,c} = empty[Math.floor(Math.random()*empty.length)];
+                // HARDER MODE: 20% chance for 4 (was 10%)
                 board[r][c] = Math.random()<0.8 ? 2 : 4;
             }
         }
@@ -681,8 +879,16 @@
             if(dir==='up') board = rotate(board, 1);
             else if(dir==='right') board = rotate(board, 2);
             else if(dir==='down') board = rotate(board, 3);
+            
+            // LOGIC CHANGE: ALWAYS SPAWN IF EMPTY SPACE
+            // Original: if (JSON.stringify(board) !== startBoard)
+            
+            let changed = JSON.stringify(board) !== startBoard;
+            let canSpawn = false;
+            // Check for any 0
+            for(let r=0; r<size; r++) for(let c=0; c<size; c++) if(board[r][c]===0) canSpawn = true;
 
-            if(JSON.stringify(board) !== startBoard) {
+            if(changed) {
                 if(addedScore > 0) {
                     score += addedScore;
                     if(addedScore >= 16) showFloatingText(0, 2, addedScore);
@@ -697,10 +903,18 @@
                 updateUI();
                 addTile();
                 drawTiles();
-
+            } else if (canSpawn) {
+                // Board didn't move but we force spawn (hardcore mode)
+                addTile();
+                drawTiles();
+                // Check game over in case this spawn filled the board with no moves
                 if(checkGameOver()) {
                     triggerGameOver();
                 }
+            }
+
+            if(changed && checkGameOver()) {
+                triggerGameOver();
             }
         }
 
@@ -716,11 +930,16 @@
 
         document.addEventListener('keydown', e => {
             if(!loginModal.classList.contains('hidden')) return;
-            if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
-            if(e.code==='ArrowUp') move('up');
-            if(e.code==='ArrowDown') move('down');
-            if(e.code==='ArrowLeft') move('left');
-            if(e.code==='ArrowRight') move('right');
+            
+            // Prevent default scrolling
+            if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight', 'KeyW', 'KeyS', 'KeyA', 'KeyD'].includes(e.code)) {
+                 if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
+            }
+
+            if(e.code==='ArrowUp' || e.code==='KeyW') move('up');
+            if(e.code==='ArrowDown' || e.code==='KeyS') move('down');
+            if(e.code==='ArrowLeft' || e.code==='KeyA') move('left');
+            if(e.code==='ArrowRight' || e.code==='KeyD') move('right');
         });
 
         let tsX, tsY;
