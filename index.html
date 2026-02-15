@@ -11,9 +11,6 @@
     <!-- Firebase SDK v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
-    <!-- Screenshot Generator Library -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
         /* --- MAGICK PURPLE THEME --- */
@@ -56,7 +53,7 @@
 
         .bg-layer {
             width: 100%; height: 100%;
-            /* SUBTLE PURPLE GRADIENT */
+            /* RESTORED GRADIENT BACKGROUND */
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -64,8 +61,8 @@
             /* Flashlight Effect Mask */
             --x: 50%;
             --y: 50%;
-            -webkit-mask-image: radial-gradient(circle 250px at var(--x) var(--y), rgba(0,0,0,0.7) 10%, transparent 100%);
-            mask-image: radial-gradient(circle 250px at var(--x) var(--y), rgba(0,0,0,0.7) 10%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle 300px at var(--x) var(--y), rgba(0,0,0,0.8) 20%, transparent 100%);
+            mask-image: radial-gradient(circle 300px at var(--x) var(--y), rgba(0,0,0,0.8) 20%, transparent 100%);
             
             transition: opacity 0.5s;
         }
@@ -76,24 +73,25 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* COMETS ANIMATION */
+        /* COMETS ANIMATION - RESTORED PINK/PURPLE */
         .comet {
             position: absolute;
-            width: 100px;
+            width: 150px;
             height: 2px;
+            /* Pink/Purple Gradient */
             background: linear-gradient(90deg, var(--neon-purple), transparent);
-            box-shadow: 0 0 10px var(--neon-purple);
+            box-shadow: 0 0 15px var(--neon-pink);
             opacity: 0;
             transform: rotate(-45deg);
             z-index: -1;
             pointer-events: none;
-            animation: fly 2s linear forwards;
+            animation: fly 3s linear forwards;
         }
 
         @keyframes fly {
             0% { opacity: 0; transform: translate(0, 0) rotate(-45deg) scale(0.5); }
             10% { opacity: 1; }
-            100% { opacity: 0; transform: translate(-300px, 300px) rotate(-45deg) scale(1.2); }
+            100% { opacity: 0; transform: translate(-500px, 500px) rotate(-45deg) scale(1); }
         }
 
         /* UI HEADER */
@@ -127,10 +125,10 @@
             font-size: 40px;
             margin: 0;
             /* MATCHING GRADIENT TITLE */
-            background: linear-gradient(to right, #fff, var(--neon-purple));
+            background: linear-gradient(to right, var(--neon-pink), var(--neon-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.6));
+            filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.6));
             letter-spacing: 2px;
         }
 
@@ -221,39 +219,25 @@
             display: flex; flex-direction: column; align-items: center; gap: 15px;
         }
 
-        .tut-keys-wrapper {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-        .tut-keys-group {
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 5px;
-        }
+        .tut-keys-wrapper { display: flex; gap: 30px; align-items: center; }
+        .tut-keys-group { display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .tut-row { display: flex; gap: 5px; }
+        
         .key-cap {
             width: 50px; height: 50px;
-            border: 2px solid rgba(255,255,255,0.8);
+            border: 2px solid rgba(255,255,255,0.9);
             border-radius: 8px;
-            background: rgba(0,0,0,0.6);
+            background: rgba(40, 10, 60, 0.8);
             color: #fff;
             display: flex; justify-content: center; align-items: center;
             font-size: 24px; font-weight: bold;
-            box-shadow: 0 4px 0 rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px var(--neon-purple);
             font-family: 'Montserrat', sans-serif;
-            text-shadow: 0 0 5px var(--neon-purple);
-            /* KEY ANIMATION */
             animation: floatKeys 2s ease-in-out infinite;
         }
         
-        @keyframes floatKeys {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
+        @keyframes floatKeys { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        /* Stagger animations */
         .tut-keys-group .key-cap:nth-child(1) { animation-delay: 0s; }
         .tut-row .key-cap:nth-child(1) { animation-delay: 0.1s; }
         .tut-row .key-cap:nth-child(2) { animation-delay: 0.2s; }
@@ -261,17 +245,12 @@
         
         .tut-text { 
             font-size: 14px; font-family: 'Cinzel'; text-transform: uppercase; letter-spacing: 3px; 
-            color: #fff; text-shadow: 0 0 15px var(--neon-purple);
-            margin-top: 15px; font-weight: bold;
+            color: #fff; text-shadow: 0 0 15px var(--neon-purple); margin-top: 15px;
         }
-
-        .tut-icon { 
-            font-size: 60px; filter: drop-shadow(0 0 10px #b026ff); 
-            animation: bounceHint 1.5s infinite; 
-        }
+        
+        .tut-icon { font-size: 60px; filter: drop-shadow(0 0 10px #b026ff); animation: bounceHint 1.5s infinite; }
         @keyframes bounceHint { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* Hide Tutorial on Mobile for Specific Elements if needed, but flex handles it */
         .tut-mobile-only { display: none; }
         @media (max-width: 768px) {
             .tut-pc-only { display: none; }
@@ -388,7 +367,7 @@
             font-family: 'Cinzel', serif; 
             font-size: 36px; 
             margin: 0 0 20px 0; 
-            background: linear-gradient(to right, #fff, var(--neon-purple));
+            background: linear-gradient(to right, #ff00ff, #b026ff); /* RESTORED PINK */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.8));
@@ -467,8 +446,8 @@
     <!-- Login -->
     <div id="login-modal" class="modal-overlay hidden">
         <div class="modal-box">
-            <!-- RESTORED GRADIENT TITLE -->
-            <h1 style="font-family:'Cinzel'; margin:0 0 10px 0; background: linear-gradient(to right, #fff, var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.6)); line-height: 1;">
+            <!-- RESTORED PINK TITLE -->
+            <h1 style="font-family:'Cinzel'; margin:0 0 10px 0; background: linear-gradient(to right, #ff00ff, var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.6)); line-height: 1;">
                 2048<br>
                 <span style="font-size: 18px; letter-spacing: 8px; color: #fff; display: block; margin-top: 5px; -webkit-text-fill-color: #fff; filter: none;">MagicBlock</span>
             </h1>
@@ -494,7 +473,7 @@
         <div class="header-panel">
             <div class="user-info">
                 <h1 style="line-height: 0.8;">
-                    <!-- MATCHING GRADIENT TITLE -->
+                    <!-- MATCHING PINK TITLE -->
                     2048
                     <span style="display: block; font-size: 10px; letter-spacing: 4px; color: #fff; text-shadow: none; margin-top: 5px; -webkit-text-fill-color: #fff;">MagicBlock</span>
                 </h1>
@@ -580,18 +559,6 @@
         <div style="margin-top:10px; color:#fff; font-size:12px; cursor:pointer; opacity: 0.7;" onclick="restartGame()">RESTART</div>
     </div>
 
-    <!-- Hidden element for generating clean screenshots without grid -->
-    <div id="hidden-capture-card">
-        <div class="cap-title">2048 MAGICK</div>
-        
-        <div class="cap-label">TOTAL SCORE</div>
-        <div class="cap-score-big"><span id="cap-score-val">0</span></div>
-        
-        <div class="cap-player">Mage: <span id="cap-name-val" style="color:#b026ff;">...</span></div>
-
-        <div class="cap-footer">Certified by 2048 Magick</div>
-    </div>
-
     <script>
         // --- AUDIO ENGINE ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -630,14 +597,14 @@
 
         // --- FIREBASE ---
         const firebaseConfig = {
-            apiKey: "AIzaSyAS9c-ZENVkL7wsYCsuYST8mJd-2dV-cA8",
-            authDomain: "project-1867017293223550555.firebaseapp.com",
-            databaseURL: "https://project-1867017293223550555-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "project-1867017293223550555",
-            storageBucket: "project-1867017293223550555.firebasestorage.app",
-            messagingSenderId: "613645431332",
-            appId: "1:613645431332:web:29260f1e6ea92a86781eb1",
-            measurementId: "G-19TD39WRC3"
+            apiKey: "AIzaSyDwUQj2MG2ZLJLRSKYsDDMOJAqQZPtzYSQ",
+            authDomain: "magic-6248d.firebaseapp.com",
+            databaseURL: "https://magic-6248d-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "magic-6248d",
+            storageBucket: "magic-6248d.firebasestorage.app",
+            messagingSenderId: "651434543320",
+            appId: "1:651434543320:web:5e915ad9d951a58e71efad",
+            measurementId: "G-B7XXD8PDBM"
         };
         try { firebase.initializeApp(firebaseConfig); } catch(e){}
         const db = firebase.database();
@@ -745,6 +712,9 @@
             setTimeout(() => {
                 tutorialOverlay.classList.remove('show');
             }, 5000);
+            
+            // Switch BG to game mode
+            document.getElementById('bg-layer').classList.add('game-mode');
         }
 
         // Change user function
@@ -1011,7 +981,7 @@
             // Listen for changes
             lbQuery.on('value', lbCallback, (error) => {
                  console.error(error);
-                 c.innerHTML = '<div style="text-align:center; color:#ff5555; padding:20px;">Connection severed.<br>Check permissions.</div>';
+                 c.innerHTML = '<div style="text-align:center; color:#ff5555; padding:20px;">Connection severed.<br>Check permissions (Rules).</div>';
             });
         }
         
