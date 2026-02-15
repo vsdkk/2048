@@ -43,7 +43,7 @@
             -webkit-user-select: none;
         }
 
-        /* BACKGROUND */
+        /* BACKGROUND - PURE BLACK + COMETS ONLY */
         .bg-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -51,34 +51,13 @@
             background-color: #000;
         }
 
-        .bg-layer {
-            width: 100%; height: 100%;
-            /* SUBTLE PURPLE GRADIENT INSTEAD OF CASTLE */
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            
-            /* Flashlight Effect Mask */
-            --x: 50%;
-            --y: 50%;
-            -webkit-mask-image: radial-gradient(circle 300px at var(--x) var(--y), black 20%, transparent 100%);
-            mask-image: radial-gradient(circle 300px at var(--x) var(--y), black 20%, transparent 100%);
-            
-            transition: opacity 0.5s;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* COMETS ANIMATION */
+        /* COMETS ANIMATION - COLORFUL */
         .comet {
             position: absolute;
             width: 150px;
             height: 2px;
-            background: linear-gradient(90deg, #fff, transparent);
+            /* Pink/Purple Gradient */
+            background: linear-gradient(90deg, var(--neon-pink), transparent);
             box-shadow: 0 0 15px var(--neon-purple);
             opacity: 0;
             transform: rotate(-45deg);
@@ -123,8 +102,8 @@
             font-family: 'Cinzel', serif;
             font-size: 40px;
             margin: 0;
-            /* MATCHING GRADIENT TITLE */
-            background: linear-gradient(to right, var(--neon-pink), var(--neon-purple));
+            /* WHITE TO PURPLE GRADIENT */
+            background: linear-gradient(to right, #ffffff, var(--neon-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.6));
@@ -202,19 +181,73 @@
         .t1024 { background: linear-gradient(135deg, #000, #4a148c); color: #e0d0ff; font-size: 22px; border: 1px solid #d500f9; box-shadow: 0 0 40px rgba(213, 0, 249, 0.8); }
         .t2048 { background: linear-gradient(135deg, #000, #200030); color: var(--gold-accent); border: 2px solid var(--gold-accent); box-shadow: 0 0 50px var(--neon-purple), inset 0 0 20px var(--neon-purple); animation: shine 3s infinite; }
         
-        /* 4096 - Mystic Red */
-        .t4096 { background: linear-gradient(135deg, #ff1744, #d50000); color: #fff; border: 2px solid #ff5252; box-shadow: 0 0 55px #ff1744, inset 0 0 25px #ff1744; animation: pulse-red 2s infinite; font-size: 20px; }
+        /* NEW HIGH LEVEL TILES */
+        /* 4096 - Blood Moon Red */
+        .t4096 { background: linear-gradient(135deg, #b71c1c, #d50000); color: #fff; border: 1px solid #ff1744; box-shadow: 0 0 50px #ff1744; animation: pulse-purple 3s infinite; font-size: 20px; }
         /* 8192 - Electric Blue */
-        .t8192 { background: linear-gradient(135deg, #2979ff, #2962ff); color: #fff; border: 2px solid #448aff; box-shadow: 0 0 60px #2979ff, inset 0 0 30px #2979ff; animation: pulse-blue 2s infinite; font-size: 20px; }
-        /* 16384 - Void White */
-        .t16384 { background: linear-gradient(135deg, #000, #424242); color: #fff; border: 2px solid #fff; box-shadow: 0 0 65px #ffffff, inset 0 0 35px #ffffff; animation: shine 1.5s infinite; font-size: 18px; }
+        .t8192 { background: linear-gradient(135deg, #0d47a1, #2962ff); color: #fff; border: 1px solid #2979ff; box-shadow: 0 0 50px #2979ff; animation: pulse-purple 3s infinite; font-size: 20px; }
+        /* 16384 - Toxic Green */
+        .t16384 { background: linear-gradient(135deg, #004d40, #00c853); color: #fff; border: 2px solid #69f0ae; box-shadow: 0 0 60px #00c853; animation: shine 1.5s infinite; font-size: 18px; }
 
         .tsuper { background: #000; border: 2px solid #fff; color: #fff; box-shadow: 0 0 40px #fff; }
 
         @keyframes pulse-purple { 0% { box-shadow: 0 0 15px rgba(224, 64, 251, 0.5); } 50% { box-shadow: 0 0 25px rgba(224, 64, 251, 0.8); } 100% { box-shadow: 0 0 15px rgba(224, 64, 251, 0.5); } }
         @keyframes shine { 0% { border-color: var(--neon-purple); } 50% { border-color: #fff; } 100% { border-color: var(--neon-purple); } }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 55px #ff1744; } 50% { box-shadow: 0 0 70px #ff1744; } 100% { box-shadow: 0 0 55px #ff1744; } }
-        @keyframes pulse-blue { 0% { box-shadow: 0 0 60px #2979ff; } 50% { box-shadow: 0 0 75px #2979ff; } 100% { box-shadow: 0 0 60px #2979ff; } }
+
+        /* TUTORIAL OVERLAY */
+        #tutorial-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            pointer-events: none; z-index: 20; opacity: 0; transition: opacity 1s;
+        }
+        #tutorial-overlay.show { opacity: 1; }
+        
+        .tut-content {
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+
+        .tut-keys-wrapper { display: flex; gap: 30px; align-items: center; }
+        .tut-keys-group { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .tut-row { display: flex; gap: 5px; }
+        
+        .key-cap {
+            width: 50px; height: 50px;
+            border: 2px solid rgba(255,255,255,0.9);
+            border-radius: 8px;
+            background: rgba(40, 10, 60, 0.8);
+            color: #fff;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; font-weight: bold;
+            box-shadow: 0 0 15px var(--neon-purple);
+            font-family: 'Montserrat', sans-serif;
+            animation: floatKeys 2s ease-in-out infinite;
+        }
+        
+        @keyframes floatKeys { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        .tut-keys-group .key-cap:nth-child(1) { animation-delay: 0s; }
+        .tut-row .key-cap:nth-child(1) { animation-delay: 0.1s; }
+        .tut-row .key-cap:nth-child(2) { animation-delay: 0.2s; }
+        .tut-row .key-cap:nth-child(3) { animation-delay: 0.3s; }
+        
+        .tut-text { 
+            font-size: 14px; font-family: 'Cinzel'; text-transform: uppercase; letter-spacing: 3px; 
+            color: #fff; text-shadow: 0 0 15px var(--neon-purple); margin-top: 15px;
+        }
+        
+        .tut-icon { font-size: 60px; filter: drop-shadow(0 0 10px #b026ff); animation: bounceHint 1.5s infinite; }
+        @keyframes bounceHint { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* Hide Tutorial on Mobile for Specific Elements */
+        .tut-mobile-only { display: none; }
+        @media (max-width: 768px) {
+            .tut-pc-only { display: none; }
+            .tut-mobile-only { display: flex; }
+        }
+        @media (min-width: 769px) {
+            .tut-mobile-only { display: none; }
+            .tut-pc-only { display: flex; }
+        }
 
         /* GAME OVER OVERLAY / RESULT CARD */
         #game-over-overlay {
@@ -294,20 +327,6 @@
         }
         .btn-purple:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(176, 38, 255, 0.7); }
 
-        /* SHARE BUTTONS */
-        .share-buttons { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
-        .btn-share {
-            border: 1px solid var(--neon-purple); 
-            background: rgba(40, 10, 60, 0.8);
-            color: #fff; padding: 12px 25px; border-radius: 30px; cursor: pointer;
-            font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px;
-            transition: all 0.2s; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .btn-share:hover { background: #b026ff; box-shadow: 0 0 30px rgba(176, 38, 255, 0.6); transform: scale(1.05); }
-
         /* MODALS */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -336,7 +355,8 @@
             font-family: 'Cinzel', serif; 
             font-size: 36px; 
             margin: 0 0 20px 0; 
-            background: linear-gradient(to right, #fff, var(--neon-purple));
+            /* RESTORED WHITE TO PURPLE GRADIENT */
+            background: linear-gradient(to right, #ffffff, var(--neon-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.8));
@@ -408,14 +428,15 @@
     <div class="bg-container">
         <!-- FLASHLIGHT BACKGROUND -->
         <div class="bg-layer" id="bg-layer"></div>
+        <!-- Comets container is appended via JS -->
     </div>
     <div class="overlay"></div>
 
     <!-- Login -->
     <div id="login-modal" class="modal-overlay hidden">
         <div class="modal-box">
-            <!-- RESTORED PINK TITLE -->
-            <h1 style="font-family:'Cinzel'; margin:0 0 10px 0; background: linear-gradient(to right, #ff00ff, var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.6)); line-height: 1;">
+            <!-- RESTORED GRADIENT TITLE -->
+            <h1 style="font-family:'Cinzel'; margin:0 0 10px 0; background: linear-gradient(to right, #ffffff, var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px rgba(176, 38, 255, 0.6)); line-height: 1;">
                 2048<br>
                 <span style="font-size: 18px; letter-spacing: 8px; color: #fff; display: block; margin-top: 5px; -webkit-text-fill-color: #fff; filter: none;">MagicBlock</span>
             </h1>
@@ -441,7 +462,7 @@
         <div class="header-panel">
             <div class="user-info">
                 <h1 style="line-height: 0.8;">
-                    <!-- MATCHING PINK TITLE -->
+                    <!-- MATCHING GRADIENT TITLE -->
                     2048
                     <span style="display: block; font-size: 10px; letter-spacing: 4px; color: #fff; text-shadow: none; margin-top: 5px; -webkit-text-fill-color: #fff;">MagicBlock</span>
                 </h1>
@@ -563,14 +584,14 @@
 
         // --- FIREBASE ---
         const firebaseConfig = {
-            apiKey: "AIzaSyAS9c-ZENVkL7wsYCsuYST8mJd-2dV-cA8",
-            authDomain: "project-1867017293223550555.firebaseapp.com",
-            databaseURL: "https://project-1867017293223550555-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "project-1867017293223550555",
-            storageBucket: "project-1867017293223550555.firebasestorage.app",
-            messagingSenderId: "613645431332",
-            appId: "1:613645431332:web:29260f1e6ea92a86781eb1",
-            measurementId: "G-19TD39WRC3"
+            apiKey: "AIzaSyDwUQj2MG2ZLJLRSKYsDDMOJAqQZPtzYSQ",
+            authDomain: "magic-6248d.firebaseapp.com",
+            databaseURL: "https://magic-6248d-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "magic-6248d",
+            storageBucket: "magic-6248d.firebasestorage.app",
+            messagingSenderId: "651434543320",
+            appId: "1:651434543320:web:5e915ad9d951a58e71efad",
+            measurementId: "G-B7XXD8PDBM"
         };
         try { firebase.initializeApp(firebaseConfig); } catch(e){}
         const db = firebase.database();
@@ -600,30 +621,22 @@
 
         // COMET SPAWNER
         function spawnComet() {
-            // Chance based on document visibility to save resources
             if (document.hidden) return;
             
-            if (Math.random() > 0.3) { // 30% chance each interval
+            if (Math.random() > 0.3) { 
                 const bgContainer = document.querySelector('.bg-container');
                 const comet = document.createElement('div');
                 comet.className = 'comet';
-                
-                // Randomize start position in the top-right area mostly
-                const startY = Math.random() * window.innerHeight * 0.5; // Top half
+                const startY = Math.random() * window.innerHeight * 0.5;
                 const startX = Math.random() * window.innerWidth;
                 
                 comet.style.top = startY + 'px';
                 comet.style.left = startX + 'px';
-                
-                // Randomize animation duration
                 const duration = 1.5 + Math.random() * 2;
                 comet.style.animationDuration = duration + 's';
                 
                 bgContainer.appendChild(comet);
-                
-                setTimeout(() => {
-                    comet.remove();
-                }, duration * 1000);
+                setTimeout(() => { comet.remove(); }, duration * 1000);
             }
         }
 
@@ -632,26 +645,8 @@
                 document.getElementById('username-input').value = username;
             }
             loginModal.classList.remove('hidden');
-            
-            // Start spawning comets
             setInterval(spawnComet, 2000);
         };
-
-        // --- FLASHLIGHT MOUSE TRACKING ---
-        document.addEventListener('mousemove', (e) => {
-            if (e.target.closest('.board-wrapper')) return;
-            const bg = document.getElementById('bg-layer');
-            bg.style.setProperty('--x', e.clientX + 'px');
-            bg.style.setProperty('--y', e.clientY + 'px');
-        });
-
-        document.addEventListener('touchmove', (e) => {
-             if (e.target.closest('.board-wrapper')) return;
-            const bg = document.getElementById('bg-layer');
-            const touch = e.touches[0];
-            bg.style.setProperty('--x', touch.clientX + 'px');
-            bg.style.setProperty('--y', touch.clientY + 'px');
-        });
 
         document.getElementById('login-btn').addEventListener('click', () => {
             const val = document.getElementById('username-input').value.trim();
@@ -667,7 +662,6 @@
         function showGame() {
             gameUI.classList.remove('hidden');
             playerEl.innerText = username;
-            // USING THE NEW PATH 'scores_final' TO ENSURE CLEAN LEADERBOARD
             db.ref('scores_final/'+username).on('value', s => {
                 const d = s.val();
                 if(d && d.highscore) { bestScore = d.highscore; bestEl.innerText = bestScore; }
@@ -679,15 +673,6 @@
             setTimeout(() => {
                 tutorialOverlay.classList.remove('show');
             }, 5000);
-            
-            // Switch BG to game mode
-            document.getElementById('bg-layer').classList.add('game-mode');
-        }
-
-        // Change user function
-        window.logout = function() {
-            localStorage.removeItem('magick_block_user');
-            location.reload();
         }
 
         function startGame() {
@@ -711,8 +696,8 @@
             for(let r=0; r<size; r++) for(let c=0; c<size; c++) if(board[r][c]===0) empty.push({r,c});
             if(empty.length) {
                 let {r,c} = empty[Math.floor(Math.random()*empty.length)];
-                // HARDER MODE: 30% chance for 4 (was 20%)
-                board[r][c] = Math.random()<0.7 ? 2 : 4;
+                // HARDER MODE: 25% chance for 4
+                board[r][c] = Math.random()<0.75 ? 2 : 4;
             }
         }
 
@@ -821,12 +806,9 @@
             else if(dir==='right') board = rotate(board, 2);
             else if(dir==='down') board = rotate(board, 3);
             
-            // LOGIC CHANGE: ALWAYS SPAWN IF EMPTY SPACE
-            // Original: if (JSON.stringify(board) !== startBoard)
-            
+            // HARDCORE MODE: SPAWN ON EVERY PRESS IF EMPTY
             let changed = JSON.stringify(board) !== startBoard;
             let canSpawn = false;
-            // Check for any 0
             for(let r=0; r<size; r++) for(let c=0; c<size; c++) if(board[r][c]===0) canSpawn = true;
 
             if(changed) {
@@ -847,10 +829,9 @@
                 addTile();
                 drawTiles();
             } else if (canSpawn) {
-                // Board didn't move but we force spawn (hardcore mode)
+                // Hardcore mechanic: Spawn even if board didn't move
                 addTile();
                 drawTiles();
-                // Check game over in case this spawn filled the board with no moves
                 if(checkGameOver()) {
                     triggerGameOver();
                 }
@@ -903,7 +884,7 @@
             const c = document.getElementById('lb-content');
             c.innerHTML = '<div style="text-align:center; color:#a080c0; padding:20px;">Summoning Spirits...</div>';
             
-            // Fetch users from 'scores_final' (MATCHING THE SAVE PATH)
+            // Fetch users from new clean path 'scores_final'
             lbQuery = db.ref('scores_final');
             
             lbCallback = (snapshot) => {
