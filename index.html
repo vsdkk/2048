@@ -12,7 +12,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
-    <!-- (No html2canvas needed anymore) -->
+    <!-- Screenshot Generator Library -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
         /* --- MAGICK PURPLE THEME --- */
@@ -63,8 +64,8 @@
             /* Flashlight Effect Mask */
             --x: 50%;
             --y: 50%;
-            -webkit-mask-image: radial-gradient(circle 400px at var(--x) var(--y), black 20%, transparent 100%);
-            mask-image: radial-gradient(circle 400px at var(--x) var(--y), black 20%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle 250px at var(--x) var(--y), rgba(0,0,0,0.7) 10%, transparent 100%);
+            mask-image: radial-gradient(circle 250px at var(--x) var(--y), rgba(0,0,0,0.7) 10%, transparent 100%);
             
             transition: opacity 0.5s;
         }
@@ -359,20 +360,6 @@
         }
         .btn-purple:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(176, 38, 255, 0.7); }
 
-        /* SHARE BUTTONS */
-        .share-buttons { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
-        .btn-share {
-            border: 1px solid var(--neon-purple); 
-            background: rgba(40, 10, 60, 0.8);
-            color: #fff; padding: 12px 25px; border-radius: 30px; cursor: pointer;
-            font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px;
-            transition: all 0.2s; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .btn-share:hover { background: #b026ff; box-shadow: 0 0 30px rgba(176, 38, 255, 0.6); transform: scale(1.05); }
-
         /* MODALS */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -473,6 +460,7 @@
     <div class="bg-container">
         <!-- FLASHLIGHT BACKGROUND -->
         <div class="bg-layer" id="bg-layer"></div>
+        <!-- Comets container is appended via JS -->
     </div>
     <div class="overlay"></div>
 
@@ -590,6 +578,18 @@
 
         <button onclick="openLeaderboard()" class="btn-purple">🏆 WEEZERBORD</button>
         <div style="margin-top:10px; color:#fff; font-size:12px; cursor:pointer; opacity: 0.7;" onclick="restartGame()">RESTART</div>
+    </div>
+
+    <!-- Hidden element for generating clean screenshots without grid -->
+    <div id="hidden-capture-card">
+        <div class="cap-title">2048 MAGICK</div>
+        
+        <div class="cap-label">TOTAL SCORE</div>
+        <div class="cap-score-big"><span id="cap-score-val">0</span></div>
+        
+        <div class="cap-player">Mage: <span id="cap-name-val" style="color:#b026ff;">...</span></div>
+
+        <div class="cap-footer">Certified by 2048 Magick</div>
     </div>
 
     <script>
@@ -897,7 +897,9 @@
                 if(score > bestScore) {
                     bestScore = score;
                     bestEl.innerText = bestScore;
-                    db.ref('users/'+username).update({highscore:bestScore});
+                    // Saving to new table 'scores_final' for fresh leaderboard
+                    db.ref('scores_final/'+username).update({highscore:bestScore})
+                      .catch(e => console.error("Error saving score:", e));
                 }
                 
                 updateUI();
@@ -960,18 +962,19 @@
             const c = document.getElementById('lb-content');
             c.innerHTML = '<div style="text-align:center; color:#a080c0; padding:20px;">Summoning Spirits...</div>';
             
-            // Fetch all users to sort on client-side (reliable for small datasets)
-            lbQuery = db.ref('users');
+            // Fetch users from new clean path 'scores_final'
+            lbQuery = db.ref('scores_final');
             
             lbCallback = (snapshot) => {
                 let d = [];
-                snapshot.forEach(ch => {
-                    const val = ch.val();
-                    // Basic validation to ensure it has a score
-                    if(val && typeof val.highscore !== 'undefined') {
-                        d.push({n:ch.key, s:val.highscore});
-                    }
-                });
+                if (snapshot.exists()) {
+                    snapshot.forEach(ch => {
+                        const val = ch.val();
+                        if(val && typeof val.highscore !== 'undefined') {
+                            d.push({n:ch.key, s:val.highscore});
+                        }
+                    });
+                }
                 
                 // Sort descending
                 d.sort((a,b) => b.s - a.s);
@@ -1006,7 +1009,10 @@
             };
             
             // Listen for changes
-            lbQuery.on('value', lbCallback);
+            lbQuery.on('value', lbCallback, (error) => {
+                 console.error(error);
+                 c.innerHTML = '<div style="text-align:center; color:#ff5555; padding:20px;">Connection severed.<br>Check permissions.</div>';
+            });
         }
         
         window.closeLeaderboard = () => {
